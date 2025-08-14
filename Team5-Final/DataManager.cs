@@ -228,30 +228,37 @@ Tables found:
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
-                cmd.Parameters.AddWithValue("@p1", employeeId);
-                cmd.Parameters.AddWithValue("@p2", equipmentId);
-                cmd.Parameters.AddWithValue("@p3", when);
+                cmd.Parameters.Add("@p1", OleDbType.VarChar).Value = employeeId;  // EmployeeID is text
+                cmd.Parameters.Add("@p2", OleDbType.Integer).Value = equipmentId; // EquipmentID is number
+                cmd.Parameters.Add("@p3", OleDbType.Date).Value = when;            // DateCheckedOut is date/time
+
                 cn.Open();
                 cmd.ExecuteNonQuery();
             }
         }
 
+
+        // Changed: Return Function to work with new column added for data returned alongside fixes for data mismatch
         public void Return(int logId, DateTime when)
         {
-            // Return a tool
             const string sql = @"
-                UPDATE EquipmentLogTable
-                SET DateReturned = ?
-                WHERE LogID = ? AND DateReturned IS NULL";
+        UPDATE [EquipmentLogTable]
+        SET [DateReturned] = ?
+        WHERE [LogID] = ? AND [DateReturned] IS NULL";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
-                cmd.Parameters.AddWithValue("@p1", when);
-                cmd.Parameters.AddWithValue("@p2", logId);
+                // First placeholder = DateReturned (Date/Time)
+                cmd.Parameters.Add("DateReturned", OleDbType.Date).Value = when;
+
+                // Second placeholder = LogID (Number)
+                cmd.Parameters.Add("LogID", OleDbType.Integer).Value = logId;
+
                 cn.Open();
                 cmd.ExecuteNonQuery();
             }
         }
+
     }
 }
