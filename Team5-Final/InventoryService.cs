@@ -30,10 +30,12 @@ namespace Team5_Final.Logic
             return (true, "Checked out.");
         }
 
-        public (bool ok, string msg) Return(int logId)
+        // Updated to add damaged / lost flags
+        public (bool ok, string msg) Return(int logId, DateTime when, bool isDamaged, bool isLost)
         {
-            _data.Return(logId, DateTime.Now);
+            _data.Return(logId, when, isDamaged, isLost);
             return (true, "Returned.");
         }
+
     }
 }

@@ -239,20 +239,26 @@ Tables found:
 
 
         // Changed: Return Function to work with new column added for data returned alongside fixes for data mismatch
-        public void Return(int logId, DateTime when)
+        public void Return(int logId, DateTime when, bool isDamaged, bool isLost)
         {
             const string sql = @"
         UPDATE [EquipmentLogTable]
-        SET [DateReturned] = ?
+        SET [DateReturned] = ?, IsDamaged = ?, IsLost = ?
         WHERE [LogID] = ? AND [DateReturned] IS NULL";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
-                // First placeholder = DateReturned (Date/Time)
+                // Logging the DateReturn
                 cmd.Parameters.Add("DateReturned", OleDbType.Date).Value = when;
 
-                // Second placeholder = LogID (Number)
+                // Checking if Damaged
+                cmd.Parameters.Add("IsDamaged", OleDbType.Boolean).Value = isDamaged;
+
+                // Checking if Lost
+                cmd.Parameters.Add("IsLost", OleDbType.Boolean).Value = isLost;
+
+                // Logging the ID
                 cmd.Parameters.Add("LogID", OleDbType.Integer).Value = logId;
 
                 cn.Open();

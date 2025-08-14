@@ -75,7 +75,22 @@ namespace Team5_Final
             }
 
             int logId = Convert.ToInt32(((DataRowView)dgvActive.CurrentRow.DataBoundItem)["LogID"]);
-            var (ok, msg) = _svc.Return(logId);
+            // New prompts for Damage / Lost Check
+            bool isDamaged = MessageBox.Show(
+                "Is the item damaged?",
+                "Return Item",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+
+            bool isLost = MessageBox.Show(
+                "Is the item lost?",
+                "Return Item",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+
+            // Updated call 
+            var (ok, msg) = _svc.Return(logId, DateTime.Now, isDamaged, isLost);
+
             MessageBox.Show(msg);
             if (ok) RefreshAll();
         }
