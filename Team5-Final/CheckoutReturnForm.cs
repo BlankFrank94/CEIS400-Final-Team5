@@ -7,56 +7,74 @@ namespace Team5_Final
 {
     public partial class CheckoutReturnForm : Form
     {
+        // Service object to handle database and business logic
         private readonly InventoryService _svc = new InventoryService();
+
+        // Tracks the logged-in employee ID
         private string _employeeId;
 
         public CheckoutReturnForm()
         {
-            InitializeComponent();
+            InitializeComponent(); // Sets up form controls
         }
 
         private void cboAvailable_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // no-op (we don't need to do anything on change right now)
+            // No action needed when the available tools dropdown changes
         }
-
 
         private void CheckoutReturnForm_Load(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'cEIS400Team5DBDataSet.Equipment_Table' table. You can move, or remove it, as needed.
+            // Load equipment data into the dataset (designer-generated binding)
             this.equipment_TableTableAdapter.Fill(this.cEIS400Team5DBDataSet.Equipment_Table);
+
+            // Get the logged-in user's Employee ID
             _employeeId = CurrentUser.EmployeeId;
+
+            // Display who is signed in (use name if available, otherwise ID)
             lblUser.Text = "Signed in: " + (CurrentUser.Name ?? _employeeId);
 
-            RefreshMine();
-            FillAvailable();
-            FillReturnCombo();
+            // Fill the UI with current data
+            RefreshMine();      // My checked-out tools
+            FillAvailable();    // Available tools
+            FillReturnCombo();  // Tools I can return
         }
 
         private void RefreshMine()
         {
+            // Get a list of tools currently checked out by this employee
             var dt = _svc.EmployeeActiveCheckouts(_employeeId);
+
+            // Allow automatic column creation in the DataGridView
             dgvMyTools.AutoGenerateColumns = true;
+
+            // Bind the data to the DataGridView
             dgvMyTools.DataSource = dt;
         }
 
         private void FillReturnCombo()
         {
-            var dt = _svc.EmployeeActiveCheckouts(_employeeId); // columns: LogID, Equipment, DateCheckedOut, ...
+            // Get the tools this employee has checked out
+            var dt = _svc.EmployeeActiveCheckouts(_employeeId);
 
-            // break any previous binding to avoid the Designer’s source
+            // Remove any previous binding (avoids mixing with designer data)
             cboReturn.DataSource = null;
 
-            // bind to the runtime table that DOES have LogID
+            // Bind dropdown to show "Equipment" text but store "LogID" value
             cboReturn.DataSource = dt;
-            cboReturn.DisplayMember = "Equipment";   // alias returned by the query
+            cboReturn.DisplayMember = "Equipment";
             cboReturn.ValueMember = "LogID";
         }
 
         private void FillAvailable()
         {
-            var dt = _svc.AvailableEquipment(); // columns: EquipmentID, Name, MinSkillLevel
+            // Get all equipment that is currently available for checkout
+            var dt = _svc.AvailableEquipment();
+
+            // Clear any old binding
             cboAvailable.DataSource = null;
+
+            // Bind dropdown to show "Name" but store "EquipmentID"
             cboAvailable.DataSource = dt;
             cboAvailable.DisplayMember = "Name";
             cboAvailable.ValueMember = "EquipmentID";
@@ -64,21 +82,27 @@ namespace Team5_Final
 
         private void btnCheckout_Click(object sender, EventArgs e)
         {
+            // Ensure the user has selected something to check out
             if (cboAvailable.SelectedValue == null)
             {
                 MessageBox.Show("Select a tool to check out.");
                 return;
             }
 
+            // Get the EquipmentID from the selected item
             int equipmentId = Convert.ToInt32(cboAvailable.SelectedValue);
+
+            // Attempt to check out the tool
             var result = _svc.Checkout(_employeeId, equipmentId);
+
+            // If checkout fails, show warning
             if (!result.ok)
             {
                 MessageBox.Show(result.msg, "Checkout", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // refresh UI
+            // Refresh UI so new data is visible
             RefreshMine();
             FillAvailable();
             FillReturnCombo();
@@ -86,39 +110,44 @@ namespace Team5_Final
 
         private void btnReturn_Click(object sender, EventArgs e)
         {
+            // Ensure the user has selected a tool to return
             if (cboReturn.SelectedValue == null)
             {
                 MessageBox.Show("Select a tool to return.");
                 return;
             }
 
+            // Get the LogID for the selected tool
             int logId = Convert.ToInt32(cboReturn.SelectedValue);
 
+            // Ask if the item is damaged
             bool isDamaged = MessageBox.Show(
                 "Is the item damaged?",
                 "Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes;
 
+            // Ask if the item is lost
             bool isLost = MessageBox.Show(
                 "Is the item lost?",
                 "Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes;
 
+            // Attempt to process the return with damage/lost flags
             var result = _svc.Return(logId, isDamaged, isLost);
 
+            // If return fails, show warning
             if (!result.ok)
             {
                 MessageBox.Show(result.msg, "Return", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // Refresh UI so updated data is visible
             RefreshMine();
             FillAvailable();
             FillReturnCombo();
         }
-
-
     }
 }

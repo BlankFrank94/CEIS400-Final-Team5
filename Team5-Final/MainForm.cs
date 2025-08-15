@@ -45,6 +45,7 @@ namespace Team5_Final
             string employeeId = cmbEmployees.SelectedValue.ToString();
             string fullName, role, msg;
 
+            // Attempt login with selected employee and password
             if (!_data.TryLoginByEmployeeId(employeeId, txtPassword.Text, out fullName, out role, out msg))
             {
                 MessageBox.Show(msg, "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -53,11 +54,13 @@ namespace Team5_Final
                 return;
             }
 
+            // Store the logged-in user's info for use in other forms
             CurrentUser.Set(employeeId, fullName, role);
 
             // Navigate to the checkout/return page
             var f = new CheckoutReturnForm();
             f.StartPosition = FormStartPosition.CenterScreen;
+
             f.FormClosed += (s, args) =>
             {
                 // when child closes, clear auth and show login again
@@ -71,6 +74,7 @@ namespace Team5_Final
             f.Show();
         }
 
+        // Generate Report Function, Need to add admin check
         private void btnReport_Click(object sender, EventArgs e)
         {
             var rf = new ReportForm();

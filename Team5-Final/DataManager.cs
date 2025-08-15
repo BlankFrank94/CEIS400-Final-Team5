@@ -8,16 +8,18 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Text;
 
-
 namespace Team5_Final.Data
 {
     public class DataManager
     {
+        // Connection string to the Access DB (from App.config)
         private readonly string _cs = ConfigurationManager.ConnectionStrings["Team5_Final.Properties.Settings.CEIS400Team5DBConnectionString"].ConnectionString;
 
-        public DataManager() { 
+        public DataManager()
+        {
             EnsureSchema();
         }
+
         private static string Sha256(string text)
         {
             if (text == null) text = string.Empty;
@@ -29,6 +31,7 @@ namespace Team5_Final.Data
                 return sb.ToString();
             }
         }
+
         public int BackfillRandomCheckoutDates(int maxDays = 21)
         {
             const string SEL = @"
@@ -71,7 +74,6 @@ namespace Team5_Final.Data
                 return updated;
             }
         }
-
 
         // Simple login against existing columns
         public bool TryLoginByEmployeeId(
@@ -162,7 +164,8 @@ namespace Team5_Final.Data
         {
             return new OleDbConnection(_cs);
         }
-        //TEMP debug: Does the table contain what we think it does??
+
+        // TEMP debug: Does the table contain what we think it does??
         public void DebugDump()
         {
             // Where does |DataDirectory| resolve to?
@@ -182,7 +185,7 @@ namespace Team5_Final.Data
                     .OrderBy(n => n)
                     .ToArray();
 
-               var msg =
+                var msg =
                 $@"ConnStr:
                 {_cs}
 
@@ -195,7 +198,6 @@ namespace Team5_Final.Data
                 System.Windows.Forms.MessageBox.Show(msg, "DB Debug");
             }
         }
-
 
         public DataTable GetEmployees()
         {
@@ -299,7 +301,6 @@ namespace Team5_Final.Data
             }
         }
 
-
         public int GetEmployeeSkill(string employeeId)
         {
             // Skill for an employee
@@ -327,8 +328,6 @@ namespace Team5_Final.Data
                 return (o == null || o == DBNull.Value) ? 0 : Convert.ToInt32(o);
             }
         }
-
-
 
         public bool IsToolCheckedOut(int equipmentId)
         {
@@ -367,7 +366,6 @@ namespace Team5_Final.Data
         }
 
         // Working Return with DB
-
         public int Return(int logId, DateTime when, bool isDamaged, bool isLost)
         {
             const string sql = @"
@@ -387,9 +385,5 @@ namespace Team5_Final.Data
                 return cmd.ExecuteNonQuery();
             }
         }
-
     }
-
 }
-
-
