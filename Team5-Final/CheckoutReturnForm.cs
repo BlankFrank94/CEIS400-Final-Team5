@@ -93,17 +93,32 @@ namespace Team5_Final
             }
 
             int logId = Convert.ToInt32(cboReturn.SelectedValue);
-            var result = _svc.Return(logId);
+
+            bool isDamaged = MessageBox.Show(
+                "Is the item damaged?",
+                "Return",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+
+            bool isLost = MessageBox.Show(
+                "Is the item lost?",
+                "Return",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+
+            var result = _svc.Return(logId, isDamaged, isLost);
+
             if (!result.ok)
             {
                 MessageBox.Show(result.msg, "Return", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // refresh UI
             RefreshMine();
             FillAvailable();
             FillReturnCombo();
         }
+
+
     }
 }

@@ -366,53 +366,30 @@ namespace Team5_Final.Data
             }
         }
 
-        // Changed: Using simple return for now until DB has new columns for Damaged/Lost, Role, PasswordHash, and Salt
+        // Working Return with DB
 
-        //// Changed: Return Function to work with new column added for data returned alongside fixes for data mismatch
-        //public void Return(int logId, DateTime when, bool isDamaged, bool isLost)
-        //{
-        //    const string sql = @"
-        //UPDATE [EquipmentLogTable]
-        //SET [DateReturned] = ?, IsDamaged = ?, IsLost = ?
-        //WHERE [LogID] = ? AND [DateReturned] IS NULL";
-
-        //    using (var cn = Conn())
-        //    using (var cmd = new OleDbCommand(sql, cn))
-        //    {
-        //        // Logging the DateReturn
-        //        cmd.Parameters.Add("DateReturned", OleDbType.Date).Value = when;
-
-        //        // Checking if Damaged
-        //        cmd.Parameters.Add("IsDamaged", OleDbType.Boolean).Value = isDamaged;
-
-        //        // Checking if Lost
-        //        cmd.Parameters.Add("IsLost", OleDbType.Boolean).Value = isLost;
-
-        //        // Logging the ID
-        //        cmd.Parameters.Add("LogID", OleDbType.Integer).Value = logId;
-
-        //        cn.Open();
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //}
-
-        public void Return(int logId, DateTime when)
+        public int Return(int logId, DateTime when, bool isDamaged, bool isLost)
         {
             const string sql = @"
-                UPDATE EquipmentLogTable
-                SET DateReturned = ?
-                WHERE LogID = ? AND DateReturned IS NULL";
+        UPDATE EquipmentLogTable
+        SET DateReturned = ?, IsDamaged = ?, IsLost = ?
+        WHERE LogID = ? AND DateReturned IS NULL";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
                 cmd.Parameters.Add("@p1", OleDbType.Date).Value = when;
-                cmd.Parameters.Add("@p2", OleDbType.Integer).Value = logId;
+                cmd.Parameters.Add("@p2", OleDbType.Boolean).Value = isDamaged;
+                cmd.Parameters.Add("@p3", OleDbType.Boolean).Value = isLost;
+                cmd.Parameters.Add("@p4", OleDbType.Integer).Value = logId;
+
                 cn.Open();
-                cmd.ExecuteNonQuery();
+                return cmd.ExecuteNonQuery();
             }
         }
 
-
     }
+
 }
+
+
