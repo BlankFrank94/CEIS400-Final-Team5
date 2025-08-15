@@ -2,138 +2,108 @@
 {
     partial class MainForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        private System.Windows.Forms.Label lblEmployee;
+        private System.Windows.Forms.ComboBox cmbEmployees;
+        private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Button btnReport;
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.cbEmployee = new System.Windows.Forms.ComboBox();
-            this.cbEquipment = new System.Windows.Forms.ComboBox();
-            this.btnCheckout = new System.Windows.Forms.Button();
-            this.btnReturn = new System.Windows.Forms.Button();
-            this.dgvActive = new System.Windows.Forms.DataGridView();
-            this.cEIS400Team5DBDataSet = new Team5_Final.CEIS400Team5DBDataSet();
-            this.cEIS400Team5DBDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvActive)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cEIS400Team5DBDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cEIS400Team5DBDataSetBindingSource)).BeginInit();
+            this.lblEmployee = new System.Windows.Forms.Label();
+            this.cmbEmployees = new System.Windows.Forms.ComboBox();
+            this.lblPassword = new System.Windows.Forms.Label();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.btnLogin = new System.Windows.Forms.Button();
+            this.btnReport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // cbEmployee
+            // lblEmployee
             // 
-            this.cbEmployee.DropDownHeight = 220;
-            this.cbEmployee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbEmployee.FormattingEnabled = true;
-            this.cbEmployee.IntegralHeight = false;
-            this.cbEmployee.Location = new System.Drawing.Point(30, 21);
-            this.cbEmployee.Name = "cbEmployee";
-            this.cbEmployee.Size = new System.Drawing.Size(121, 21);
-            this.cbEmployee.TabIndex = 0;
+            this.lblEmployee.AutoSize = true;
+            this.lblEmployee.Location = new System.Drawing.Point(24, 20);
+            this.lblEmployee.Name = "lblEmployee";
+            this.lblEmployee.Size = new System.Drawing.Size(88, 13);
+            this.lblEmployee.TabIndex = 0;
+            this.lblEmployee.Text = "Select employee:";
             // 
-            // cbEquipment
+            // cmbEmployees
             // 
-            this.cbEquipment.DropDownHeight = 220;
-            this.cbEquipment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbEquipment.FormattingEnabled = true;
-            this.cbEquipment.IntegralHeight = false;
-            this.cbEquipment.Location = new System.Drawing.Point(200, 21);
-            this.cbEquipment.Name = "cbEquipment";
-            this.cbEquipment.Size = new System.Drawing.Size(121, 21);
-            this.cbEquipment.TabIndex = 1;
-            this.cbEquipment.SelectedIndexChanged += new System.EventHandler(this.cbEquipment_SelectedIndexChanged);
+            this.cmbEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEmployees.FormattingEnabled = true;
+            this.cmbEmployees.Location = new System.Drawing.Point(27, 36);
+            this.cmbEmployees.Name = "cmbEmployees";
+            this.cmbEmployees.Size = new System.Drawing.Size(260, 21);
+            this.cmbEmployees.TabIndex = 1;
             // 
-            // btnCheckout
+            // lblPassword
             // 
-            this.btnCheckout.Location = new System.Drawing.Point(360, 21);
-            this.btnCheckout.Name = "btnCheckout";
-            this.btnCheckout.Size = new System.Drawing.Size(105, 23);
-            this.btnCheckout.TabIndex = 2;
-            this.btnCheckout.Text = "Checkout";
-            this.btnCheckout.UseVisualStyleBackColor = true;
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Location = new System.Drawing.Point(24, 70);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(56, 13);
+            this.lblPassword.TabIndex = 2;
+            this.lblPassword.Text = "Password:";
             // 
-            // btnReturn
+            // txtPassword
             // 
-            this.btnReturn.Location = new System.Drawing.Point(523, 20);
-            this.btnReturn.Name = "btnReturn";
-            this.btnReturn.Size = new System.Drawing.Size(110, 23);
-            this.btnReturn.TabIndex = 3;
-            this.btnReturn.Text = "Return Selected";
-            this.btnReturn.UseVisualStyleBackColor = true;
+            this.txtPassword.Location = new System.Drawing.Point(27, 86);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '●';
+            this.txtPassword.Size = new System.Drawing.Size(260, 20);
+            this.txtPassword.TabIndex = 3;
             // 
-            // dgvActive
+            // btnLogin
             // 
-            this.dgvActive.AllowUserToAddRows = false;
-            this.dgvActive.AutoGenerateColumns = false;
-            this.dgvActive.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvActive.DataSource = this.cEIS400Team5DBDataSetBindingSource;
-            this.dgvActive.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvActive.Location = new System.Drawing.Point(0, 300);
-            this.dgvActive.Name = "dgvActive";
-            this.dgvActive.ReadOnly = true;
-            this.dgvActive.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvActive.Size = new System.Drawing.Size(800, 150);
-            this.dgvActive.TabIndex = 4;
+            this.btnLogin.Location = new System.Drawing.Point(27, 124);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(120, 28);
+            this.btnLogin.TabIndex = 4;
+            this.btnLogin.Text = "Login";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // cEIS400Team5DBDataSet
+            // btnReport
             // 
-            this.cEIS400Team5DBDataSet.DataSetName = "CEIS400Team5DBDataSet";
-            this.cEIS400Team5DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // cEIS400Team5DBDataSetBindingSource
-            // 
-            this.cEIS400Team5DBDataSetBindingSource.DataSource = this.cEIS400Team5DBDataSet;
-            this.cEIS400Team5DBDataSetBindingSource.Position = 0;
+            this.btnReport.Location = new System.Drawing.Point(167, 124);
+            this.btnReport.Name = "btnReport";
+            this.btnReport.Size = new System.Drawing.Size(120, 28);
+            this.btnReport.TabIndex = 5;
+            this.btnReport.Text = "Generate Report…";
+            this.btnReport.UseVisualStyleBackColor = true;
+            this.btnReport.Click += new System.EventHandler(this.btnReport_Click);
             // 
             // MainForm
             // 
+            this.AcceptButton = this.btnLogin;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dgvActive);
-            this.Controls.Add(this.btnReturn);
-            this.Controls.Add(this.btnCheckout);
-            this.Controls.Add(this.cbEquipment);
-            this.Controls.Add(this.cbEmployee);
+            this.ClientSize = new System.Drawing.Size(796, 277);
+            this.Controls.Add(this.btnReport);
+            this.Controls.Add(this.btnLogin);
+            this.Controls.Add(this.txtPassword);
+            this.Controls.Add(this.lblPassword);
+            this.Controls.Add(this.cmbEmployees);
+            this.Controls.Add(this.lblEmployee);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Main Form";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvActive)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cEIS400Team5DBDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cEIS400Team5DBDataSetBindingSource)).EndInit();
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Tool Depot – Login";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
-
-        #endregion
-
-        private System.Windows.Forms.ComboBox cbEmployee;
-        private System.Windows.Forms.ComboBox cbEquipment;
-        private System.Windows.Forms.Button btnCheckout;
-        private System.Windows.Forms.Button btnReturn;
-        private System.Windows.Forms.DataGridView dgvActive;
-        private System.Windows.Forms.BindingSource cEIS400Team5DBDataSetBindingSource;
-        private CEIS400Team5DBDataSet cEIS400Team5DBDataSet;
     }
 }
-

@@ -5,6 +5,9 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Security.Cryptography;
+using System.Text;
+
 
 namespace Team5_Final.Data
 {
@@ -15,7 +18,106 @@ namespace Team5_Final.Data
         public DataManager() { 
             EnsureSchema();
         }
+        private static string Sha256(string text)
+        {
+            if (text == null) text = string.Empty;
+            using (var sha = SHA256.Create())
+            {
+                byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(text));
+                var sb = new StringBuilder(hash.Length * 2);
+                foreach (var b in hash) sb.Append(b.ToString("x2"));
+                return sb.ToString();
+            }
+        }
+        public int BackfillRandomCheckoutDates(int maxDays = 21)
+        {
+            const string SEL = @"
+                SELECT LogID
+                FROM EquipmentLogTable
+                WHERE DateCheckedOut IS NULL AND DateReturned IS NULL";
 
+            const string UPD = @"
+                UPDATE EquipmentLogTable
+                SET DateCheckedOut = ?
+                WHERE LogID = ?";
+
+            using (var cn = Conn())
+            using (var cmdSel = new OleDbCommand(SEL, cn))
+            using (var cmdUpd = new OleDbCommand(UPD, cn))
+            {
+                cmdUpd.Parameters.Add("@p1", OleDbType.Date);
+                cmdUpd.Parameters.Add("@p2", OleDbType.Integer);
+
+                cn.Open();
+
+                var ids = new System.Collections.Generic.List<int>();
+                using (var rd = cmdSel.ExecuteReader())
+                    while (rd.Read())
+                        ids.Add(Convert.ToInt32(rd["LogID"]));
+
+                var rnd = new Random();
+                int updated = 0;
+
+                foreach (var id in ids)
+                {
+                    var when = DateTime.Now
+                        .AddDays(-rnd.Next(1, maxDays + 1))
+                        .AddHours(-rnd.Next(0, 24));
+
+                    cmdUpd.Parameters[0].Value = when;
+                    cmdUpd.Parameters[1].Value = id;
+                    updated += cmdUpd.ExecuteNonQuery();
+                }
+                return updated;
+            }
+        }
+
+
+        // Simple login against existing columns
+        public bool TryLoginByEmployeeId(
+            string employeeId, string password,
+            out string fullName, out string role, out string message)
+        {
+            fullName = null;
+            role = "User";
+            message = "Invalid credentials.";
+
+            if (string.IsNullOrWhiteSpace(employeeId) || string.IsNullOrEmpty(password))
+            {
+                message = "Select an employee and enter a password.";
+                return false;
+            }
+
+            // NOTE: table name has a space, and Password is a reserved word → use brackets.
+            const string sql = @"
+        SELECT FirstName, LastName
+        FROM [Employees Table]
+        WHERE EmployeeID = ? AND [Password] = ?";
+
+            using (var cn = Conn())
+            using (var cmd = new OleDbCommand(sql, cn))
+            {
+                // OleDb parameters are positional – keep this order.
+                cmd.Parameters.Add("p1", OleDbType.VarChar).Value = employeeId;
+                cmd.Parameters.Add("p2", OleDbType.VarChar).Value = password;
+
+                cn.Open();
+                using (var rd = cmd.ExecuteReader())
+                {
+                    if (!rd.Read()) return false;
+
+                    var first = Convert.ToString(rd["FirstName"]);
+                    var last = Convert.ToString(rd["LastName"]);
+                    fullName = $"{first} {last}".Trim();
+
+                    // Optional: hard-code admins if you want
+                    // if (employeeId.Equals("ab1889", StringComparison.OrdinalIgnoreCase)) role = "Admin";
+
+                    message = "Login successful.";
+                    return true;
+                }
+            }
+        }
 
         private void EnsureSchema()
         {
@@ -80,15 +182,15 @@ namespace Team5_Final.Data
                     .OrderBy(n => n)
                     .ToArray();
 
-                var msg =
-        $@"ConnStr:
-{_cs}
+               var msg =
+                $@"ConnStr:
+                {_cs}
 
-|DataDirectory|:
-{dataDir}
+                |DataDirectory|:
+                {dataDir}
 
-Tables found:
-{string.Join(Environment.NewLine, names)}";
+                Tables found:
+                    {string.Join(Environment.NewLine, names)}";
 
                 System.Windows.Forms.MessageBox.Show(msg, "DB Debug");
             }
@@ -117,6 +219,33 @@ Tables found:
                 var dt = new DataTable();
                 da.Fill(dt);
                 return dt;
+            }
+        }
+
+        public DataTable GetEmployeeActiveCheckouts(string employeeId)
+        {
+            const string sql = @"
+                SELECT  l.LogID,
+                        l.EquipmentID,
+                        e.[EquipmentName] AS Equipment,
+                        l.DateCheckedOut
+                FROM EquipmentLogTable AS l
+                INNER JOIN [Equipment Table] AS e ON e.EquipmentID = l.EquipmentID
+                WHERE l.EmployeeID = ? AND l.DateReturned IS NULL
+                ORDER BY l.DateCheckedOut DESC;";
+
+            using (var cn = Conn())
+            using (var cmd = new OleDbCommand(sql, cn))
+            {
+                // OleDb is positional — keep the same order as the ? in the SQL
+                cmd.Parameters.Add("p1", OleDbType.VarChar).Value = employeeId;
+
+                using (var da = new OleDbDataAdapter(cmd))
+                {
+                    var dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
             }
         }
 
@@ -237,34 +366,53 @@ Tables found:
             }
         }
 
+        // Changed: Using simple return for now until DB has new columns for Damaged/Lost, Role, PasswordHash, and Salt
 
-        // Changed: Return Function to work with new column added for data returned alongside fixes for data mismatch
-        public void Return(int logId, DateTime when, bool isDamaged, bool isLost)
+        //// Changed: Return Function to work with new column added for data returned alongside fixes for data mismatch
+        //public void Return(int logId, DateTime when, bool isDamaged, bool isLost)
+        //{
+        //    const string sql = @"
+        //UPDATE [EquipmentLogTable]
+        //SET [DateReturned] = ?, IsDamaged = ?, IsLost = ?
+        //WHERE [LogID] = ? AND [DateReturned] IS NULL";
+
+        //    using (var cn = Conn())
+        //    using (var cmd = new OleDbCommand(sql, cn))
+        //    {
+        //        // Logging the DateReturn
+        //        cmd.Parameters.Add("DateReturned", OleDbType.Date).Value = when;
+
+        //        // Checking if Damaged
+        //        cmd.Parameters.Add("IsDamaged", OleDbType.Boolean).Value = isDamaged;
+
+        //        // Checking if Lost
+        //        cmd.Parameters.Add("IsLost", OleDbType.Boolean).Value = isLost;
+
+        //        // Logging the ID
+        //        cmd.Parameters.Add("LogID", OleDbType.Integer).Value = logId;
+
+        //        cn.Open();
+        //        cmd.ExecuteNonQuery();
+        //    }
+        //}
+
+        public void Return(int logId, DateTime when)
         {
             const string sql = @"
-        UPDATE [EquipmentLogTable]
-        SET [DateReturned] = ?, IsDamaged = ?, IsLost = ?
-        WHERE [LogID] = ? AND [DateReturned] IS NULL";
+                UPDATE EquipmentLogTable
+                SET DateReturned = ?
+                WHERE LogID = ? AND DateReturned IS NULL";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
-                // Logging the DateReturn
-                cmd.Parameters.Add("DateReturned", OleDbType.Date).Value = when;
-
-                // Checking if Damaged
-                cmd.Parameters.Add("IsDamaged", OleDbType.Boolean).Value = isDamaged;
-
-                // Checking if Lost
-                cmd.Parameters.Add("IsLost", OleDbType.Boolean).Value = isLost;
-
-                // Logging the ID
-                cmd.Parameters.Add("LogID", OleDbType.Integer).Value = logId;
-
+                cmd.Parameters.Add("@p1", OleDbType.Date).Value = when;
+                cmd.Parameters.Add("@p2", OleDbType.Integer).Value = logId;
                 cn.Open();
                 cmd.ExecuteNonQuery();
             }
         }
+
 
     }
 }

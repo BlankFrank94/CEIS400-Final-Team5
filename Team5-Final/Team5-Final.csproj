@@ -53,6 +53,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CEIS400Team5DBDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="CheckoutReturnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckoutReturnForm.Designer.cs">
+      <DependentUpon>CheckoutReturnForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CurrentUser.cs" />
     <Compile Include="InventoryService.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="MainForm.cs">
@@ -63,6 +70,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="CheckoutReturnForm.resx">
+      <DependentUpon>CheckoutReturnForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -75,6 +91,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="CEIS400Team5DBDataSet.xsc">
       <DependentUpon>CEIS400Team5DBDataSet.xsd</DependentUpon>
     </None>

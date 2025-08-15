@@ -1,103 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Team5_Final.Data;
 using Team5_Final.Logic;
 
 namespace Team5_Final
 {
-
     public partial class MainForm : Form
     {
         private readonly InventoryService _svc = new InventoryService();
+        private readonly DataManager _data = new DataManager();
+
         public MainForm()
         {
             InitializeComponent();
-            Load += MainForm_Load;
-            btnCheckout.Click += BtnCheckout_Click;
-            btnReturn.Click += BtnReturn_Click;
         }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            RefreshAll();
+            // Load employees into combo
+            var dt = _svc.Employees(); // columns: EmployeeID, FirstName, LastName, SkillLevel
+            if (!dt.Columns.Contains("FullName"))
+                dt.Columns.Add("FullName", typeof(string));
+
+            foreach (DataRow r in dt.Rows)
+                r["FullName"] = string.Format("{0} {1}", r["FirstName"], r["LastName"]);
+
+            cmbEmployees.DisplayMember = "FullName";
+            cmbEmployees.ValueMember = "EmployeeID";
+            cmbEmployees.DataSource = dt;
+
+            // remove any previous “dashboard” grids from this form
+            // (per your new layout: login + report only)
         }
 
-
-    private void RefreshAll()
+        private void btnLogin_Click(object sender, EventArgs e)
         {
-            // Employees
-            var emps = _svc.Employees();
-            cbEmployee.DataSource = emps;
-            cbEmployee.DisplayMember = "LastName";
-            cbEmployee.ValueMember = "EmployeeID";
-
-            // Available tools
-            var eq = _svc.AvailableEquipment();
-            cbEquipment.DataSource = eq;
-            cbEquipment.DisplayMember = "Name";
-            cbEquipment.ValueMember = "EquipmentID";
-
-            // Active checkouts
-            dgvActive.AutoGenerateColumns = true;
-            dgvActive.DataSource = _svc.ActiveCheckouts();
-            if (dgvActive.Columns.Contains("LogID"))
-                dgvActive.Columns["LogID"].Visible = false;
-        }
-
-        private void BtnCheckout_Click(object sender, EventArgs e)
-        {
-            if (cbEmployee.SelectedValue == null || cbEquipment.SelectedValue == null)
+            if (cmbEmployees.SelectedValue == null)
             {
-                MessageBox.Show("Pick employee and tool.");
+                MessageBox.Show("Please select an employee.");
                 return;
             }
 
-            string empId = cbEmployee.SelectedValue.ToString();
-            int eqId = Convert.ToInt32(cbEquipment.SelectedValue);
-            var (ok, msg) = _svc.Checkout(empId, eqId);
-            MessageBox.Show(msg);
-            if (ok) RefreshAll();
-        }
+            string employeeId = cmbEmployees.SelectedValue.ToString();
+            string fullName, role, msg;
 
-        private void BtnReturn_Click(object sender, EventArgs e)
-        {
-            if (dgvActive.CurrentRow == null)
+            if (!_data.TryLoginByEmployeeId(employeeId, txtPassword.Text, out fullName, out role, out msg))
             {
-                MessageBox.Show("Select a checkout row first.");
+                MessageBox.Show(msg, "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPassword.Clear();
+                txtPassword.Focus();
                 return;
             }
 
-            int logId = Convert.ToInt32(((DataRowView)dgvActive.CurrentRow.DataBoundItem)["LogID"]);
-            // New prompts for Damage / Lost Check
-            bool isDamaged = MessageBox.Show(
-                "Is the item damaged?",
-                "Return Item",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question) == DialogResult.Yes;
+            CurrentUser.Set(employeeId, fullName, role);
 
-            bool isLost = MessageBox.Show(
-                "Is the item lost?",
-                "Return Item",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question) == DialogResult.Yes;
+            // Navigate to the checkout/return page
+            var f = new CheckoutReturnForm();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.FormClosed += (s, args) =>
+            {
+                // when child closes, clear auth and show login again
+                CurrentUser.Clear();
+                this.Show();
+                txtPassword.Clear();
+                txtPassword.Focus();
+            };
 
-            // Updated call 
-            var (ok, msg) = _svc.Return(logId, DateTime.Now, isDamaged, isLost);
-
-            MessageBox.Show(msg);
-            if (ok) RefreshAll();
+            this.Hide();
+            f.Show();
         }
 
-        private void cbEquipment_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnReport_Click(object sender, EventArgs e)
         {
-
+            var rf = new ReportForm();
+            rf.StartPosition = FormStartPosition.CenterParent;
+            rf.ShowDialog(this);
         }
     }
 }

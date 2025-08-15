@@ -11,6 +11,8 @@ namespace Team5_Final.Logic
         public DataTable Employees() => _data.GetEmployees();
         public DataTable AvailableEquipment() => _data.GetAvailableEquipment();
         public DataTable ActiveCheckouts() => _data.GetActiveCheckouts();
+        public DataTable EmployeeActiveCheckouts(string employeeId) => _data.GetEmployeeActiveCheckouts(employeeId);
+
 
         public (bool ok, string msg) Checkout(string employeeId, int equipmentId)
         {
@@ -30,12 +32,20 @@ namespace Team5_Final.Logic
             return (true, "Checked out.");
         }
 
-        // Updated to add damaged / lost flags
-        public (bool ok, string msg) Return(int logId, DateTime when, bool isDamaged, bool isLost)
+        //// Updated to add damaged / lost flags
+        //public (bool ok, string msg) Return(int logId, DateTime when, bool isDamaged, bool isLost)
+        //{
+        //    _data.Return(logId, when, isDamaged, isLost);
+        //    return (true, "Returned.");
+        //}
+
+        // Test: Removing isDamaged, bool isLost for testing
+        public (bool ok, string msg) Return(int logId)
         {
-            _data.Return(logId, when, isDamaged, isLost);
+            _data.Return(logId, DateTime.Now);
             return (true, "Returned.");
         }
+
 
     }
 }
