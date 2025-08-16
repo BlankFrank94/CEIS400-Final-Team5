@@ -79,12 +79,13 @@ namespace Team5_Final.Data
 
         // ----------------- Auth -----------------
 
+        // ----------------- Auth -----------------
         public bool TryLoginByEmployeeId(
             string employeeId, string password,
             out string fullName, out string role, out string message)
         {
             fullName = null;
-            role = "User";
+            role = null;
             message = "Invalid credentials.";
 
             if (string.IsNullOrWhiteSpace(employeeId) || string.IsNullOrEmpty(password))
@@ -94,9 +95,9 @@ namespace Team5_Final.Data
             }
 
             const string sql = @"
-                SELECT FirstName, LastName, Role
-                FROM [Employees Table]
-                WHERE EmployeeID = ? AND [Password] = ?";
+        SELECT FirstName, LastName, Role, JobStatus
+        FROM [Employees Table]
+        WHERE EmployeeID = ? AND [Password] = ?";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
@@ -108,18 +109,44 @@ namespace Team5_Final.Data
                 cn.Open();
                 using (var rd = cmd.ExecuteReader())
                 {
-                    if (!rd.Read()) return false;
+                    if (!rd.Read())
+                    {
+                        message = "Invalid ID or password.";
+                        return false;
+                    }
 
                     var first = Convert.ToString(rd["FirstName"]);
                     var last = Convert.ToString(rd["LastName"]);
+                    var dbRole = rd["Role"] as string;       // may be null
+                    var jobStatus = rd["JobStatus"] as string;  // e.g., "Active", "Terminated"
+
                     fullName = $"{first} {last}".Trim();
-                    role = Convert.ToString(rd["Role"]) ?? "User";
+                    role = dbRole; // pass back what we actually enforce below
+
+                    // Block anything not Active
+                    if (!string.Equals(jobStatus, "Active", StringComparison.OrdinalIgnoreCase))
+                    {
+                        message = $"Login blocked: account status is '{jobStatus ?? "Unknown"}'.";
+                        return false;
+                    }
+
+                    // Role must be User or Admin
+                    bool isUserOrAdmin =
+                        string.Equals(dbRole, "User", StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(dbRole, "Admin", StringComparison.OrdinalIgnoreCase);
+
+                    if (!isUserOrAdmin)
+                    {
+                        message = "Login blocked: account has no valid role. Contact an administrator.";
+                        return false;
+                    }
 
                     message = "Login successful.";
                     return true;
                 }
             }
         }
+
 
         // ----------------- Schema helper -----------------
 
