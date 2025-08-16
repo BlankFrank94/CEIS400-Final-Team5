@@ -86,13 +86,5 @@ namespace Team5_Final
             this.Hide();
             next.Show();
         }
-
-        // Opens the report form when Report button is clicked
-        private void btnReport_Click(object sender, EventArgs e)
-        {
-            var rf = new ReportForm();
-            rf.StartPosition = FormStartPosition.CenterParent;
-            rf.ShowDialog(this);
-        }
     }
 }

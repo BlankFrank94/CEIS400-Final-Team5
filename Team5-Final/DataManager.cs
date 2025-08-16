@@ -1,27 +1,31 @@
-﻿using System;
+﻿// File: Team5_Final/Data/DataManager.cs
+
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using System.Security.Cryptography; // needed for RandomNumberGenerator in RandomDigits
+using System.Text;                 // needed for StringBuilder in RandomDigits (and Sha256 if re-enabled)
 using System.Windows.Forms;
 
 namespace Team5_Final.Data
 {
     public class DataManager
     {
-        // Connection string to the Access DB (from App.config)
+        // ----- Connection string from App.config -----
         private readonly string _cs =
             ConfigurationManager.ConnectionStrings["Team5_Final.Properties.Settings.CEIS400Team5DBConnectionString"]
             .ConnectionString;
 
         public DataManager()
         {
+            // ----- make sure schema columns exist before using db -----
             EnsureSchema();
         }
 
+        // ----- UNUSED: SHA256 hash helper, not used anywhere -----
+        /*
         private static string Sha256(string text)
         {
             if (text == null) text = string.Empty;
@@ -33,7 +37,10 @@ namespace Team5_Final.Data
                 return sb.ToString();
             }
         }
+        */
 
+        // ----- UNUSED: helper to backfill random checkout dates for testing -----
+        /*
         public int BackfillRandomCheckoutDates(int maxDays = 21)
         {
             const string SEL = @"
@@ -76,10 +83,11 @@ namespace Team5_Final.Data
                 return updated;
             }
         }
+        */
 
-        // ----------------- Auth -----------------
+        // ----------------- Auth and Login -----------------
 
-        // ----------------- Auth -----------------
+        // ----- Try login by EmployeeID + password (requires Active + role User/Admin) -----
         public bool TryLoginByEmployeeId(
             string employeeId, string password,
             out string fullName, out string role, out string message)
@@ -95,9 +103,9 @@ namespace Team5_Final.Data
             }
 
             const string sql = @"
-        SELECT FirstName, LastName, Role, JobStatus
-        FROM [Employees Table]
-        WHERE EmployeeID = ? AND [Password] = ?";
+                SELECT FirstName, LastName, Role, JobStatus
+                FROM [Employees Table]
+                WHERE EmployeeID = ? AND [Password] = ?";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
@@ -117,20 +125,20 @@ namespace Team5_Final.Data
 
                     var first = Convert.ToString(rd["FirstName"]);
                     var last = Convert.ToString(rd["LastName"]);
-                    var dbRole = rd["Role"] as string;       // may be null
-                    var jobStatus = rd["JobStatus"] as string;  // e.g., "Active", "Terminated"
+                    var dbRole = rd["Role"] as string;         // may be null
+                    var jobStatus = rd["JobStatus"] as string; // "Active", "Terminated", etc.
 
                     fullName = $"{first} {last}".Trim();
-                    role = dbRole; // pass back what we actually enforce below
+                    role = dbRole; // returned for role-based routing
 
-                    // Block anything not Active
+                    // must be active
                     if (!string.Equals(jobStatus, "Active", StringComparison.OrdinalIgnoreCase))
                     {
                         message = $"Login blocked: account status is '{jobStatus ?? "Unknown"}'.";
                         return false;
                     }
 
-                    // Role must be User or Admin
+                    // must have role user/admin
                     bool isUserOrAdmin =
                         string.Equals(dbRole, "User", StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(dbRole, "Admin", StringComparison.OrdinalIgnoreCase);
@@ -147,9 +155,9 @@ namespace Team5_Final.Data
             }
         }
 
-
         // ----------------- Schema helper -----------------
 
+        // ----- Ensure schema has expected columns (adds DateReturned if missing) -----
         private void EnsureSchema()
         {
             try
@@ -158,7 +166,7 @@ namespace Team5_Final.Data
                 {
                     cn.Open();
 
-                    // Look up columns on EquipmentLogTable, add DateReturned if missing
+                    // look up columns on EquipmentLogTable
                     var cols = cn.GetSchema("COLUMNS", new[] { null, null, "EquipmentLogTable", null });
 
                     bool hasDateReturned = false;
@@ -188,10 +196,13 @@ namespace Team5_Final.Data
             }
         }
 
+        // ----- creates unopened connection -----
         private OleDbConnection Conn() => new OleDbConnection(_cs);
 
         // ----------------- Debug helpers -----------------
 
+        // ----- UNUSED: Debug dump of DB schema and conn info -----
+        /*
         public void DebugDump()
         {
             var dataDir = AppDomain.CurrentDomain.GetData("DataDirectory") as string
@@ -222,9 +233,11 @@ Tables found:
                 MessageBox.Show(msg, "DB Debug");
             }
         }
+        */
 
-        // ----------------- Queries used elsewhere -----------------
+        // ----------------- Employee Queries -----------------
 
+        // ----- get employee list (for UI dropdowns) -----
         public DataTable GetEmployees()
         {
             var dataDir = AppDomain.CurrentDomain.GetData("DataDirectory") as string
@@ -248,14 +261,13 @@ Tables found:
             }
         }
 
-        // === Admin helpers for Employees =========================================
-
+        // ----- admin view of employees (includes role/jobstatus/password col) -----
         public DataTable GetEmployeesForAdmin()
         {
             const string sql = @"
-        SELECT EmployeeID, [Password], FirstName, LastName, SkillLevel, Role, JobStatus
-        FROM [Employees Table]
-        ORDER BY LastName, FirstName";
+                SELECT EmployeeID, [Password], FirstName, LastName, SkillLevel, Role, JobStatus
+                FROM [Employees Table]
+                ORDER BY LastName, FirstName";
             using (var cn = Conn())
             using (var da = new OleDbDataAdapter(sql, cn))
             {
@@ -265,13 +277,13 @@ Tables found:
             }
         }
 
-        // Getting Employee by ID
+        // ----- get one employee row by ID (or null) -----
         public DataRow GetEmployeeById(string employeeId)
         {
             const string sql = @"
-        SELECT EmployeeID, [Password], FirstName, LastName, SkillLevel, Role, JobStatus
-        FROM [Employees Table]
-        WHERE EmployeeID = ?";
+                SELECT EmployeeID, [Password], FirstName, LastName, SkillLevel, Role, JobStatus
+                FROM [Employees Table]
+                WHERE EmployeeID = ?";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
@@ -288,7 +300,7 @@ Tables found:
             }
         }
 
-        // Create a random ID like "ab1234" and ensure it doesn't already exist
+        // ----- Create a random ID like "ab1234" and ensure it doesn't already exist -----
         public string GenerateEmployeeId(string firstName, string lastName, int digits = 4)
         {
             // build the 2-letter prefix from initials (lowercase)
@@ -300,7 +312,7 @@ Tables found:
             {
                 cn.Open();
 
-                // try a bunch of random suffixes until we find an unused one
+                // try random suffixes until we find an unused one
                 for (int attempt = 0; attempt < 500; attempt++)
                 {
                     string candidate = prefix + RandomDigits(digits);
@@ -318,6 +330,7 @@ Tables found:
             throw new Exception("Could not generate a unique Employee ID after many attempts.");
         }
 
+        // ----- helper: secure random digits 0..9 as string -----
         private static string RandomDigits(int length)
         {
             var bytes = new byte[length];
@@ -331,10 +344,9 @@ Tables found:
             return sb.ToString();
         }
 
+        // ----- Setting Role and Status -------
 
-
-        // Setting Role and Status
-
+        // ----- set employee role (null clears role) -----
         public int SetEmployeeRole(string employeeId, string roleOrNull)
         {
             const string sql = @"UPDATE [Employees Table] SET [Role] = ? WHERE EmployeeID = ?";
@@ -353,7 +365,8 @@ Tables found:
             }
         }
 
-        public int SetEmployeeStatus(string employeeId, string status)  // unchanged, shown for completeness
+        // ----- set employee job status (e.g., Active / Terminated) -----
+        public int SetEmployeeStatus(string employeeId, string status)
         {
             const string sql = @"UPDATE [Employees Table] SET [JobStatus] = ? WHERE EmployeeID = ?";
             using (var cn = Conn())
@@ -367,13 +380,13 @@ Tables found:
             }
         }
 
-        // Restore from Termination
+        // ----- restore a terminated employee to Active + User -----
         public int RestoreEmployee(string employeeId)
         {
             const string sql = @"
-        UPDATE [Employees Table]
-           SET [JobStatus] = ?, [Role] = ?
-         WHERE EmployeeID = ?";
+                UPDATE [Employees Table]
+                   SET [JobStatus] = ?, [Role] = ?
+                 WHERE EmployeeID = ?";
 
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
@@ -387,35 +400,18 @@ Tables found:
             }
         }
 
-
-        public int UpdateEmployeeCore(string employeeId, int skillLevel, string role, string jobStatus)
-        {
-            const string sql = @"
-        UPDATE [Employees Table]
-           SET SkillLevel = ?, Role = ?, JobStatus = ?
-         WHERE EmployeeID = ?";
-            using (var cn = Conn())
-            using (var cmd = new OleDbCommand(sql, cn))
-            {
-                cmd.Parameters.Add("@p1", OleDbType.Integer).Value = skillLevel;
-                cmd.Parameters.Add("@p2", OleDbType.VarChar).Value = role;
-                cmd.Parameters.Add("@p3", OleDbType.VarChar).Value = jobStatus;
-                cmd.Parameters.Add("@p4", OleDbType.VarChar).Value = employeeId;
-                cn.Open();
-                return cmd.ExecuteNonQuery();
-            }
-        }
-
+        // ----- add a new employee record -----
         public int AddEmployee(string employeeId, string password, string first, string last, int skillLevel, string role, string jobStatus)
         {
             const string sql = @"
         INSERT INTO [Employees Table] (EmployeeID, [Password], FirstName, LastName, SkillLevel, Role, JobStatus)
         VALUES (?,?,?,?,?,?,?)";
+
             using (var cn = Conn())
             using (var cmd = new OleDbCommand(sql, cn))
             {
                 cmd.Parameters.Add("@p1", OleDbType.VarChar).Value = employeeId;
-                cmd.Parameters.Add("@p2", OleDbType.VarChar).Value = password;     // store as-is per your current table
+                cmd.Parameters.Add("@p2", OleDbType.VarChar).Value = password; // plaintext per current schema
                 cmd.Parameters.Add("@p3", OleDbType.VarChar).Value = first;
                 cmd.Parameters.Add("@p4", OleDbType.VarChar).Value = last;
                 cmd.Parameters.Add("@p5", OleDbType.Integer).Value = skillLevel;
@@ -427,6 +423,30 @@ Tables found:
             }
         }
 
+
+        // ----- UNUSED: bulk update core fields in one call -----
+        /*
+        public int UpdateEmployeeCore(string employeeId, int skillLevel, string role, string jobStatus)
+        {
+            const string sql = @"
+                UPDATE [Employees Table]
+                   SET SkillLevel = ?, Role = ?, JobStatus = ?
+                 WHERE EmployeeID = ?";
+            using (var cn = Conn())
+            using (var cmd = new OleDbCommand(sql, cn))
+            {
+                cmd.Parameters.Add("@p1", OleDbType.Integer).Value = skillLevel;
+                cmd.Parameters.Add("@p2", OleDbType.VarChar).Value = role;
+                cmd.Parameters.Add("@p3", OleDbType.VarChar).Value = jobStatus;
+                cmd.Parameters.Add("@p4", OleDbType.VarChar).Value = employeeId;
+                cn.Open();
+                return cmd.ExecuteNonQuery();
+            }
+        }
+        */
+
+        // ----- UNUSED: reset employee password (no UI path) -----
+        /*
         public int ResetEmployeePassword(string employeeId, string newPassword)
         {
             const string sql = @"UPDATE [Employees Table] SET [Password] = ? WHERE EmployeeID = ?";
@@ -439,8 +459,11 @@ Tables found:
                 return cmd.ExecuteNonQuery();
             }
         }
+        */
 
+        // -------- Fetching Current Checkouts -----
 
+        // ----- all active checkouts for one employee -----
         public DataTable GetEmployeeActiveCheckouts(string employeeId)
         {
             const string sql = @"
@@ -467,6 +490,7 @@ Tables found:
             }
         }
 
+        // ----- all active checkouts across the system -----
         public DataTable GetActiveCheckouts()
         {
             const string sql = @"
@@ -491,6 +515,7 @@ Tables found:
             }
         }
 
+        // ----- list equipment that is NOT checked out right now -----
         public DataTable GetAvailableEquipment()
         {
             const string sql = @"
@@ -515,6 +540,7 @@ Tables found:
             }
         }
 
+        // ----- lookup employee skill level -----
         public int GetEmployeeSkill(string employeeId)
         {
             const string sql = @"SELECT SkillLevel FROM [Employees Table] WHERE EmployeeID = ?";
@@ -528,6 +554,7 @@ Tables found:
             }
         }
 
+        // ----- lookup tool minimum skill level -----
         public int GetToolMinSkill(int equipmentId)
         {
             const string sql = @"SELECT MinSkillLevel FROM [Equipment Table] WHERE EquipmentID = ?";
@@ -541,6 +568,7 @@ Tables found:
             }
         }
 
+        // ----- is the tool currently checked out? -----
         public bool IsToolCheckedOut(int equipmentId)
         {
             const string sql = @"
@@ -557,6 +585,7 @@ Tables found:
             }
         }
 
+        // ----- create checkout row -----
         public void Checkout(string employeeId, int equipmentId, DateTime when)
         {
             const string sql = @"
@@ -575,6 +604,7 @@ Tables found:
             }
         }
 
+        // ----- mark a checkout as returned (with damage/loss flags) -----
         public int Return(int logId, DateTime when, bool isDamaged, bool isLost)
         {
             const string sql = @"
@@ -599,6 +629,7 @@ Tables found:
         //  Inventory CRUD (used by ManageInventoryForm)
         // =====================================================================
 
+        // ----- list all equipment (for inventory UI) -----
         public DataTable GetAllEquipment()
         {
             const string sql = @"
@@ -614,18 +645,16 @@ Tables found:
             }
         }
 
-        // Returns one row per distinct tool name so the UI can auto-fill fields
-        // when a name is selected. Access aggregates: FIRST() picks an arbitrary
-        // description example; MIN() gives a conservative min skill.
+        // ----- name templates for autofill (FIRST/ MIN aggregates) -----
         public DataTable GetEquipmentTemplates()
         {
             const string sql = @"
-        SELECT  [EquipmentName]            AS [Name],
-                FIRST([Description])       AS [Description],
-                MIN([MinSkillLevel])       AS [MinSkillLevel]
-        FROM [Equipment Table]
-        GROUP BY [EquipmentName]
-        ORDER BY [EquipmentName];";
+                SELECT  [EquipmentName]            AS [Name],
+                        FIRST([Description])       AS [Description],
+                        MIN([MinSkillLevel])       AS [MinSkillLevel]
+                FROM [Equipment Table]
+                GROUP BY [EquipmentName]
+                ORDER BY [EquipmentName];";
 
             using (var cn = Conn())
             using (var da = new OleDbDataAdapter(sql, cn))
@@ -636,12 +665,11 @@ Tables found:
             }
         }
 
-
-        // Helper: pass DBNull for empty strings
+        // ----- helper: pass DBNull for empty strings -----
         private static object DbOrNull(string s) =>
             string.IsNullOrWhiteSpace(s) ? (object)DBNull.Value : s;
 
-        // Generate a new unique EquipmentID (since the column is not AutoNumber)
+        // ----- find next free EquipmentID (table is not AutoNumber) -----
         private int GetNextEquipmentId(OleDbConnection cn, OleDbTransaction tx)
         {
             using (var cmdMax = new OleDbCommand(
@@ -667,7 +695,7 @@ Tables found:
             }
         }
 
-        // INSERT with generated EquipmentID
+        // ----- insert new equipment with generated ID -----
         public int AddEquipment(string name, string description, string condition, decimal price, int minSkill)
         {
             const string SQL =
@@ -686,7 +714,7 @@ Tables found:
 
                         using (var cmd = new OleDbCommand(SQL, cn, tx))
                         {
-                            cmd.Parameters.Add("@p0", OleDbType.Integer).Value = newId;                 // We supply the ID
+                            cmd.Parameters.Add("@p0", OleDbType.Integer).Value = newId; // manual ID
                             cmd.Parameters.Add("@p1", OleDbType.VarChar).Value = name;
                             cmd.Parameters.Add("@p2", OleDbType.VarChar).Value = DbOrNull(description);
                             cmd.Parameters.Add("@p3", OleDbType.VarChar).Value = DbOrNull(condition);
@@ -708,6 +736,7 @@ Tables found:
             }
         }
 
+        // ----- update existing equipment -----
         public int UpdateEquipment(int id, string name, string description, string condition, decimal price, int minSkill)
         {
             const string sql = @"
@@ -733,6 +762,7 @@ Tables found:
             }
         }
 
+        // ----- delete equipment by ID -----
         public int DeleteEquipment(int id)
         {
             const string sql = @"DELETE FROM [Equipment Table] WHERE EquipmentID = ?";

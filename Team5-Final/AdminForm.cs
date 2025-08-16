@@ -131,7 +131,7 @@ namespace Team5_Final
             FillReturnCombo();
         }
 
-
+        // Generating Report
         private void btnReport_Click(object sender, EventArgs e)
         {
             using (var rf = new ReportForm())
