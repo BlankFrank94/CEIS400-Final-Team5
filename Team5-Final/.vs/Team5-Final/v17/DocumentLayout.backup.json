@@ -3,36 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\datamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:datamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|c:\\users\\caleb\\source\\repos\\ceis400-final-team5\\team5-final\\adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:adminform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|c:\\users\\caleb\\source\\repos\\ceis400-final-team5\\team5-final\\inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|c:\\users\\caleb\\source\\repos\\ceis400-final-team5\\team5-final\\manageemployeesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:manageemployeesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:inventoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A82B2B1-38F2-4A0C-BF52-DDCD328A4006}|Team5-Final.csproj|solutionrelative:checkoutreturnform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,8 +34,22 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs",
+              "RelativeDocumentMoniker": "MainForm.cs",
+              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs*",
+              "RelativeToolTip": "MainForm.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-14T04:12:15.755Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
@@ -66,105 +72,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "ManageEmployeesForm.cs",
+              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\ManageEmployeesForm.cs",
+              "RelativeDocumentMoniker": "ManageEmployeesForm.cs",
+              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\ManageEmployeesForm.cs*",
+              "RelativeToolTip": "ManageEmployeesForm.cs*",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAQwNUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-16T00:47:38.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminForm.cs",
+              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\AdminForm.cs",
+              "RelativeDocumentMoniker": "AdminForm.cs",
+              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\AdminForm.cs",
+              "RelativeToolTip": "AdminForm.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAIwKQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-15T20:47:26.685Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CheckoutReturnForm.cs",
               "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\CheckoutReturnForm.cs",
               "RelativeDocumentMoniker": "CheckoutReturnForm.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\CheckoutReturnForm.cs*",
-              "RelativeToolTip": "CheckoutReturnForm.cs*",
-              "ViewState": "AgIAADYAAAAAAAAAAAA7wJkAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\CheckoutReturnForm.cs",
+              "RelativeToolTip": "CheckoutReturnForm.cs",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAwwJkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-15T05:29:29.529Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CheckoutReturnForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\CheckoutReturnForm.cs",
-              "RelativeDocumentMoniker": "CheckoutReturnForm.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\CheckoutReturnForm.cs [Design]*",
-              "RelativeToolTip": "CheckoutReturnForm.cs [Design]*",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T05:25:34.36Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "MainForm.cs",
-              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs",
-              "RelativeDocumentMoniker": "MainForm.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs",
-              "RelativeToolTip": "MainForm.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAYwDQAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-14T04:12:15.755Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "DataManager.cs",
               "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\DataManager.cs",
               "RelativeDocumentMoniker": "DataManager.cs",
               "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\DataManager.cs",
               "RelativeToolTip": "DataManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHABAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALICAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-14T22:54:50.624Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-14T04:42:51.8Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "App.config",
-              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\App.config",
-              "RelativeDocumentMoniker": "App.config",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\App.config",
-              "RelativeToolTip": "App.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-08-14T04:29:33.37Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "InventoryService.cs",
               "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\InventoryService.cs",
               "RelativeDocumentMoniker": "InventoryService.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\InventoryService.cs*",
-              "RelativeToolTip": "InventoryService.cs*",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAYwDwAAABZAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\InventoryService.cs",
+              "RelativeToolTip": "InventoryService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAzwDwAAABZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-14T04:08:18.226Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MainForm.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs",
-              "RelativeDocumentMoniker": "MainForm.cs",
-              "ToolTip": "C:\\Users\\caleb\\source\\repos\\CEIS400-Final-Team5\\Team5-Final\\MainForm.cs [Design]",
-              "RelativeToolTip": "MainForm.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-14T02:10:08.51Z",
-              "EditorCaption": " [Design]"
             }
           ]
         }

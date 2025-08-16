@@ -8,34 +8,38 @@ namespace Team5_Final
 {
     public partial class MainForm : Form
     {
-        private readonly InventoryService _svc = new InventoryService();
-        private readonly DataManager _data = new DataManager();
+        private readonly InventoryService _svc = new InventoryService(); // Handles inventory-related database operations
+        private readonly DataManager _data = new DataManager(); // Handles user authentication and data management
 
         public MainForm()
         {
             InitializeComponent();
         }
 
+        // Runs when the form loads
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Load employees into combo
+            // Get employee data from the database
             var dt = _svc.Employees(); // columns: EmployeeID, FirstName, LastName, SkillLevel
+
+            // Add a FullName column if it doesn't exist
             if (!dt.Columns.Contains("FullName"))
                 dt.Columns.Add("FullName", typeof(string));
 
+            // Populate FullName for each employee
             foreach (DataRow r in dt.Rows)
                 r["FullName"] = string.Format("{0} {1}", r["FirstName"], r["LastName"]);
 
+            // Bind employees to the combo box
             cmbEmployees.DisplayMember = "FullName";
             cmbEmployees.ValueMember = "EmployeeID";
             cmbEmployees.DataSource = dt;
-
-            // remove any previous “dashboard” grids from this form
-            // (per your new layout: login + report only)
         }
 
+        // Handles the login process when the Login button is clicked
         private void btnLogin_Click(object sender, EventArgs e)
         {
+            // Make sure an employee is selected
             if (cmbEmployees.SelectedValue == null)
             {
                 MessageBox.Show("Please select an employee.");
@@ -45,7 +49,7 @@ namespace Team5_Final
             string employeeId = cmbEmployees.SelectedValue.ToString();
             string fullName, role, msg;
 
-            // Attempt login with selected employee and password
+            // Try to log in with entered password
             if (!_data.TryLoginByEmployeeId(employeeId, txtPassword.Text, out fullName, out role, out msg))
             {
                 MessageBox.Show(msg, "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -54,16 +58,25 @@ namespace Team5_Final
                 return;
             }
 
-            // Store the logged-in user's info for use in other forms
+            // Save logged-in user info
             CurrentUser.Set(employeeId, fullName, role);
 
-            // Navigate to the checkout/return page
-            var f = new CheckoutReturnForm();
-            f.StartPosition = FormStartPosition.CenterScreen;
-
-            f.FormClosed += (s, args) =>
+            // Open AdminForm if Admin, otherwise open CheckoutReturnForm
+            Form next;
+            if (string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase))
             {
-                // when child closes, clear auth and show login again
+                next = new AdminForm();
+            }
+            else
+            {
+                next = new CheckoutReturnForm();
+            }
+
+            next.StartPosition = FormStartPosition.CenterScreen;
+
+            // When the child form closes, log the user out and return to login screen
+            next.FormClosed += (s, args) =>
+            {
                 CurrentUser.Clear();
                 this.Show();
                 txtPassword.Clear();
@@ -71,10 +84,10 @@ namespace Team5_Final
             };
 
             this.Hide();
-            f.Show();
+            next.Show();
         }
 
-        // Generate Report Function, Need to add admin check
+        // Opens the report form when Report button is clicked
         private void btnReport_Click(object sender, EventArgs e)
         {
             var rf = new ReportForm();

@@ -37,3 +37,7 @@ C:\Users\afran\OneDrive\Desktop\CEIS400\Team-5-Finalv2\Team5-Final\obj\Debug\Tea
 C:\Users\afran\OneDrive\Desktop\CEIS400\Team-5-Finalv2\Team5-Final\obj\Debug\Team5_Final.ReportForm.resources
 C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5_Final.CheckoutReturnForm.resources
 C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5_Final.ReportForm.resources
+C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5-Final.exe.config
+C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5_Final.AdminForm.resources
+C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5_Final.ManageInventoryForm.resources
+C:\Users\caleb\Source\Repos\CEIS400-Final-Team5\Team5-Final\obj\Debug\Team5_Final.ManageEmployeesForm.resources

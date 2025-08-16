@@ -122,12 +122,14 @@ namespace Team5_Final
 
             // Ask if the item is damaged
             bool isDamaged = MessageBox.Show(
+                // Unfinished: Update Inventory to correlate damage to quality level
                 "Is the item damaged?",
                 "Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes;
 
             // Ask if the item is lost
+            // Unfinished: Update Inventory to correlate lost inventory
             bool isLost = MessageBox.Show(
                 "Is the item lost?",
                 "Return",
