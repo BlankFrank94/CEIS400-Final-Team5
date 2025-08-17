@@ -17,6 +17,7 @@ A test Admin account is included:
 User: Admin User Password: 0000
 (Admin-only controls appear automatically after an Admin logs in.)
 
+
 1) Requirements
 
 Windows 10/11
@@ -28,6 +29,7 @@ If you see “provider not registered” at runtime, install the Microsoft Acces
 (If your Office install is 32-bit, either use the 32-bit ACE or install the 64-bit redistributable using the passive switch.)
 
 You do not need Microsoft Access itself; just the ACE provider.
+
 
 2) Get the code
 
@@ -44,6 +46,7 @@ git clone https://github.com/BlankFrank94/CEIS400-Final-Team5.git
 
 If you’re evaluating new Admin features, switch to our test branch in GitHub (named in the repo). Otherwise, use the default branch.
 
+
 3) Open & run in Visual Studio
 
 Open Team5-Final.sln.
@@ -57,6 +60,7 @@ Copy to Output Directory = Copy if newer.
 This ensures the database is placed next to the built EXE.
 
 Press F5 to run.
+
 
 4) Using the app
 Login (Main Form)
@@ -98,6 +102,7 @@ Restore Employee (sets back to Active/User).
 
 Changes appear immediately in the grid.
 
+
 5) What’s in the code (high level)
 
 Data access: DataManager.cs (OleDb / Access SQL)
@@ -119,6 +124,7 @@ ManageInventoryForm.cs (if included in your branch)
 Current user context: CurrentUser.cs
 
 Entry point: Program.cs
+
 
 6) Test accounts & data
 
@@ -147,6 +153,7 @@ Simon Wright: tRzvMCCG
 Victor Howard: tF4yvCsS
 Warren Mitchell: gqmxmMH7
 
+
 7) Troubleshooting
 
 “Provider not registered” → Install the ACE OLE DB engine (match the bitness you’re running).
@@ -161,6 +168,7 @@ Tables used by the app (do not rename):
 EquipmentLogTable (contains: LogID, EmployeeID, EquipmentID, DateCheckedOut, DateReturned, optional IsDamaged/IsLost)
 
 DB not found → Confirm CEIS400Team5DB.accdb is present in the project and set to Copy if newer so it lands in bin\Debug (or bin\Release) next to the EXE.
+
 
 8) Grading checklist (quick)
 
