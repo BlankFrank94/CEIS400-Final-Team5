@@ -1,5 +1,5 @@
 # CEIS400-Final-Team5
-CEIS400 Team 5 — Equipment Checkout System
+CEIS400 Team 5: Equipment Checkout System
 
 How to download, run, and grade the app
 
