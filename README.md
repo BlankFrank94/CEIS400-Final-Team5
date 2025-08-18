@@ -14,7 +14,8 @@ Reports: View all open checkouts and Export to CSV.
 Admin Panel (Admin only): Manage employees (add, terminate/restore, grant/revoke admin).
 
 A test Admin account is included:
-User: Admin User Password: 0000
+User: "Admin User" 
+Password: "0000"
 (Admin-only controls appear automatically after an Admin logs in.)
 
 
@@ -44,7 +45,7 @@ Option B — Clone
 git clone https://github.com/BlankFrank94/CEIS400-Final-Team5.git
 
 
-If you’re evaluating new Admin features, switch to our test branch in GitHub (named in the repo). Otherwise, use the default branch.
+Use the default branch.
 
 
 3) Open & run in Visual Studio
